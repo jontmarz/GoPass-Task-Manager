@@ -89,7 +89,23 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     ```
 
 2.  **Crea el archivo de variables de entorno:**
-    Copia el contenido de `.env.example` a un nuevo archivo llamado `.env` y ajústalo si es necesario.
+    Copia el contenido de `.env.example` a un nuevo archivo llamado `.env` y ajústalo si es necesario. Este archivo contiene las siguientes variables:
+
+    ```env
+    # URL de conexión a la base de datos PostgreSQL
+    DATABASE_URL="postgresql://user:password@localhost:5432/taskmanager"
+
+    # Secreto para firmar los tokens JWT
+    JWT_SECRET="super-secret-key-change-in-production"
+    JWT_EXPIRES_IN="7d"
+
+    # Puerto en el que se ejecutará el backend
+    PORT=3000
+
+    # URL del frontend para la configuración de CORS
+    FRONTEND_URL="http://localhost:5173"
+    ```
+    Ajusta los valores según tu configuración local. `FRONTEND_URL` es crucial para evitar problemas de CORS.
 
 3.  **Instala las dependencias:**
     ```bash
@@ -114,11 +130,22 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     npm install
     ```
 
-3.  **Inicia el servidor de desarrollo de Vite:**
+3.  **Crea el archivo de variables de entorno:**
+    Copia el contenido de `.env.example` a un nuevo archivo llamado `.env` y configúralo:
+
+    ```env
+    # URL del backend a la que se conectará el frontend
+    VITE_API_URL="http://localhost:3000/api"
+    ```
+    > **Importante:** Si el backend se está ejecutando en una URL o puerto diferente, asegúrate de actualizar `VITE_API_URL` para que coincida (ej. `VITE_API_URL="http://localhost:4000/api"`).
+
+4.  **Inicia el servidor de desarrollo de Vite:**
     ```bash
     npm run dev
     ```
     El frontend estará disponible en `http://localhost:5173` (o el puerto que indique Vite).
+
+    > **Nota importante sobre CORS:** Si Vite inicia el frontend en un puerto diferente (por ejemplo, `5174`), asegúrate de actualizar la variable `FRONTEND_URL` en el archivo `.env` del **backend** para que coincida con la nueva URL (ej. `FRONTEND_URL="http://localhost:5174"`). Esto es necesario para que el backend permita las peticiones desde el frontend.
 
 ## 📖 Documentación de la API
 
@@ -127,4 +154,3 @@ La API del backend está documentada con Swagger (OpenAPI). Una vez que el servi
 **http://localhost:3000/api/docs**
 
 Desde allí, puedes probar todos los endpoints, incluyendo el registro y el login para obtener un token JWT para las rutas protegidas.
-
