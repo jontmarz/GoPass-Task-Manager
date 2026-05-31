@@ -24,6 +24,16 @@ Construido con **NestJS**, sigue una arquitectura modular y orientada a servicio
 | **Passport.js + JWT** | Autenticación basada en tokens |
 | **Swagger (OpenAPI)** | Documentación y prueba de API |
 
+#### Descripción de Tecnologías (Backend)
+
+-   **Node.js (v20.x):** Entorno de ejecución de JavaScript del lado del servidor, basado en el motor V8 de Chrome. Permite construir aplicaciones de red rápidas y escalables.
+-   **NestJS (v10.x):** Framework progresivo de Node.js para construir aplicaciones eficientes, fiables y escalables. Utiliza TypeScript y sigue patrones de arquitectura como la Inyección de Dependencias, Módulos y Controladores.
+-   **Prisma (v5.x):** ORM de nueva generación para Node.js y TypeScript. Facilita la interacción con la base de datos mediante un schema declarativo y un cliente de base de datos auto-generado y totalmente tipado.
+-   **PostgreSQL (v15.x):** Potente sistema de gestión de bases de datos relacionales de código abierto, conocido por su robustez, extensibilidad y cumplimiento de estándares.
+-   **Zod (v3.x):** Librería de validación de schemas con inferencia de tipos estáticos. Se utiliza para validar los DTOs (Data Transfer Objects) en los controladores, asegurando que los datos de entrada sean correctos.
+-   **Passport.js + JWT:** Estrategia de autenticación estándar para proteger endpoints. Passport.js es un middleware de autenticación modular, y se usa junto a JSON Web Tokens (JWT) para gestionar sesiones de usuario sin estado.
+-   **Swagger (OpenAPI):** Herramienta para diseñar, construir, documentar y consumir APIs RESTful. En este proyecto, se usa para generar una documentación interactiva de la API, facilitando las pruebas.
+
 ### Frontend
 
 Desarrollado con **React** y **Vite**, se enfoca en una experiencia de usuario moderna, reactiva y optimista.
@@ -39,6 +49,20 @@ Desarrollado con **React** y **Vite**, se enfoca en una experiencia de usuario m
 | **Axios** | Cliente HTTP con interceptores |
 | **TailwindCSS** (v3.x) | Framework de CSS utility-first |
 | **Zod** (v3.x) | Validación de formularios |
+| **React Beautiful DnD** (v13.x) | Funcionalidad de arrastrar y soltar (Drag and Drop) |
+
+#### Descripción de Tecnologías (Frontend)
+
+-   **React (v18.x):** Librería de JavaScript para construir interfaces de usuario interactivas y reutilizables. Su enfoque declarativo y basado en componentes facilita el desarrollo de UIs complejas.
+-   **TypeScript (v5.x):** Superset de JavaScript que añade tipado estático opcional. Mejora la robustez del código, la autocompletación y la detección temprana de errores.
+-   **Vite (v5.x):** Herramienta de desarrollo y construcción de frontend extremadamente rápida. Proporciona un servidor de desarrollo con Hot Module Replacement (HMR) instantáneo y optimiza el empaquetado para producción.
+-   **Zustand (v4.x):** Solución de gestión de estado global minimalista y potente para React. Se utiliza para gestionar el estado del cliente, como la información del usuario autenticado y el token JWT.
+-   **TanStack Query (v5.x):** Librería para la gestión del estado del servidor. Simplifica el fetching, caching, sincronización y actualización de datos, proporcionando una experiencia de usuario optimista y reactiva.
+-   **React Router DOM (v6.x):** Librería estándar para el enrutamiento en aplicaciones React. Permite la navegación declarativa entre las diferentes páginas de la aplicación.
+-   **Axios:** Cliente HTTP basado en promesas para el navegador y Node.js. Se utiliza para realizar peticiones a la API del backend, con una instancia configurada con interceptores para manejar la autenticación y los errores de forma global.
+-   **TailwindCSS (v3.x):** Framework de CSS "utility-first" que permite construir diseños personalizados rápidamente sin salir del HTML. Facilita la creación de un sistema de diseño consistente.
+-   **Zod (v3.x):** Utilizado en el frontend para la validación de esquemas de formularios, asegurando que los datos enviados por el usuario cumplan con el formato esperado antes de enviarlos a la API.
+-   **React Beautiful DnD (v13.x):** Librería para crear funcionalidades de arrastrar y soltar (drag and drop) accesibles y de alto rendimiento. En este proyecto, se utiliza para permitir al usuario reorganizar las tareas entre diferentes estados (ej. "Pendiente", "En Progreso", "Hecho").
 
 ## 📁 Estructura de Directorios
 
@@ -112,7 +136,13 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
     npm install
     ```
 
-4.  **Inicia el servidor de desarrollo:**
+4.  **Ejecuta las migraciones de la base de datos:**
+    Asegúrate de que tu base de datos PostgreSQL (ej. Docker) esté en funcionamiento. Luego, ejecuta el siguiente comando para crear las tablas (`User`, `Project`, `Task`) en la base de datos:
+    ```bash
+    npx prisma migrate dev --name init
+    ```
+
+5.  **Inicia el servidor de desarrollo:**
     ```bash
     npm run start:dev
     ```

@@ -19,9 +19,14 @@ export const useAuth = () => {
       setAuth(data.access_token, data.user);
       navigate('/dashboard');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Login failed:', error);
-      // Aquí se podría mostrar una notificación de error al usuario
+      if (error?.response?.status === 404) {
+        alert('El usuario no existe');
+        navigate('/signup');
+      } else {
+        alert('Error al iniciar sesión');
+      }
     },
   });
 
