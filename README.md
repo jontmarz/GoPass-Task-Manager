@@ -103,84 +103,78 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
 
 ### Prerrequisitos
 
-- **Node.js** (v20 o superior)
-- **npm** (o tu gestor de paquetes preferido)
-- **Docker** y **Docker Compose** (para la base de datos)
+-   **Node.js** (v20 o superior)
+-   **npm** (o tu gestor de paquetes preferido)
+-   **Docker** y **Docker Compose**
 
-### 1. Configuración del Backend
+### 1. Configuración de Variables de Entorno
+
+Antes de ejecutar la aplicación (ya sea con Docker o manualmente), es crucial configurar las variables de entorno.
+
+#### Backend (`/backend/.env`)
+
+1.  Navega a la carpeta `backend`.
+2.  Copia el contenido de `.env.example` a un nuevo archivo llamado `.env`.
+3.  Añade tu clave de API para Gemini en `GEMINI_API_KEY`.
+4.  **Importante:** La `DATABASE_URL` debe ajustarse dependiendo de cómo ejecutes el proyecto:
+    -   **Para Docker (Recomendado):** La URL debe apuntar al nombre del servicio de la base de datos definido en `docker-compose.yml`, que es `postgres`.
+        ```env
+        DATABASE_URL="postgresql://user:password@postgres:5432/taskmanager"
+        ```
+    -   **Para Ejecución Manual:** Si tienes PostgreSQL corriendo directamente en tu máquina, usa `localhost`.
+        ```env
+        DATABASE_URL="postgresql://user:password@localhost:5432/taskmanager"
+        ```
+
+#### Frontend (`/frontend/.env`)
+
+1.  Navega a la carpeta `frontend`.
+2.  Copia `.env.example` a un nuevo archivo `.env`. El valor por defecto es correcto para la mayoría de los casos.
+    ```env
+    VITE_API_URL="http://localhost:3000/api"
+    ```
+
+### 2. Ejecución con Docker Compose (Método Recomendado)
+
+Este método orquesta la base de datos, el backend y el frontend automáticamente, asegurando un entorno consistente y reproducible. Es la forma ideal de trabajar en este proyecto.
 
 1.  **Navega al directorio del backend:**
     ```bash
-    cd backend
+    cd / # Asegúrate de estar en la raíz del proyecto
     ```
 
-2.  **Crea el archivo de variables de entorno:**
-    Copia el contenido de `.env.example` a un nuevo archivo llamado `.env` y ajústalo si es necesario. Este archivo contiene las siguientes variables:
-
-    ```env
-    # URL de conexión a la base de datos PostgreSQL
-    DATABASE_URL="postgresql://user:password@localhost:5432/taskmanager"
-
-    # Secreto para firmar los tokens JWT
-    JWT_SECRET="super-secret-key-change-in-production"
-    JWT_EXPIRES_IN="7d"
-
-    # Puerto en el que se ejecutará el backend
-    PORT=3000
-
-    # URL del frontend para la configuración de CORS
-    FRONTEND_URL="http://localhost:5173"
-
-    # Clave de API para el asistente de IA de Google Gemini
-    GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
-    ```
-    Ajusta los valores según tu configuración local. `FRONTEND_URL` es crucial para evitar problemas de CORS.
-
-3.  **Instala las dependencias:**
+2.  **Levanta los servicios:**
+    Asegúrate de que Docker Desktop esté en ejecución y luego lanza el siguiente comando:
     ```bash
-    npm install
+    docker-compose up --build
     ```
+    -   El flag `--build` reconstruirá las imágenes si hay cambios en los `Dockerfile` o en el código fuente.
+    -   Este comando se encargará de:
+        -   Crear una red interna para los servicios.
+        -   Levantar un contenedor de **PostgreSQL**.
+        -   Construir y levantar el contenedor del **backend**, aplicando las migraciones de Prisma automáticamente.
+        -   Construir y levantar el contenedor del **frontend** con Nginx.
 
-4.  **Ejecuta las migraciones de la base de datos:**
-    Asegúrate de que tu base de datos PostgreSQL (ej. Docker) esté en funcionamiento. Luego, ejecuta el siguiente comando para crear las tablas (`User`, `Project`, `Task`) en la base de datos:
-    ```bash
-    npx prisma migrate dev --name init
-    ```
+3.  **Accede a la aplicación:**
+    -   El **Frontend** estará disponible en `http://localhost:5173`.
+    -   El **Backend** estará disponible en `http://localhost:3000`.
 
-5.  **Inicia el servidor de desarrollo:**
-    ```bash
-    npm run start:dev
-    ```
-    El backend estará disponible en `http://localhost:3000`.
+### 3. Ejecución Manual (Alternativa)
 
-### 2. Configuración del Frontend
+Si prefieres no usar Docker, puedes ejecutar cada parte del proyecto por separado.
 
-1.  **Navega al directorio del frontend en otra terminal:**
-    ```bash
-    cd frontend
-    ```
+#### Backend
 
-2.  **Instala las dependencias:**
-    ```bash
-    npm install
-    ```
+1.  Asegúrate de tener una instancia de **PostgreSQL** corriendo y accesible en la URL especificada en `backend/.env` (con `localhost`).
+2.  En el directorio `/backend`, instala dependencias (`npm install`).
+3.  Aplica las migraciones: `npx prisma migrate dev --name init`.
+4.  Inicia el servidor: `npm run start:dev`.
 
-3.  **Crea el archivo de variables de entorno:**
-    Copia el contenido de `.env.example` a un nuevo archivo llamado `.env` y configúralo:
+#### Frontend
 
-    ```env
-    # URL del backend a la que se conectará el frontend
-    VITE_API_URL="http://localhost:3000/api"
-    ```
-    > **Importante:** Si el backend se está ejecutando en una URL o puerto diferente, asegúrate de actualizar `VITE_API_URL` para que coincida (ej. `VITE_API_URL="http://localhost:4000/api"`).
-
-4.  **Inicia el servidor de desarrollo de Vite:**
-    ```bash
-    npm run dev
-    ```
-    El frontend estará disponible en `http://localhost:5173` (o el puerto que indique Vite).
-
-    > **Nota importante sobre CORS:** Si Vite inicia el frontend en un puerto diferente (por ejemplo, `5174`), asegúrate de actualizar la variable `FRONTEND_URL` en el archivo `.env` del **backend** para que coincida con la nueva URL (ej. `FRONTEND_URL="http://localhost:5174"`). Esto es necesario para que el backend permita las peticiones desde el frontend.
+1.  En otra terminal, ve al directorio `/frontend`.
+2.  Instala dependencias (`npm install`).
+3.  Inicia el servidor de desarrollo: `npm run dev`.
 
 ## 📖 Documentación de la API
 
@@ -189,3 +183,10 @@ La API del backend está documentada con Swagger (OpenAPI). Una vez que el servi
 **http://localhost:3000/api/docs**
 
 Desde allí, puedes probar todos los endpoints, incluyendo el registro y el login para obtener un token JWT para las rutas protegidas.
+
+
+## 馃 Contribuci贸n
+
+隆Las contribuciones son bienvenidas! Si deseas contribuir, por favor comunicate con el administrador, es decir, conmigo, contactame al correo [dev@jontmarz.com](mailto:dev@jontmarz.com). [Visita mi website](https://jontmarz.com/)
+
+Espero que disfrutes el proyecto.

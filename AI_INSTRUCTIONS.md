@@ -549,4 +549,16 @@ Se integrará una funcionalidad nativa de IA en el backend para actuar como asis
   3. **Structured Outputs:** Obligar al modelo a responder estrictamente en formato JSON que coincida con el DTO de creación de tareas (arreglo de objetos con `title`, `description`, `priority` y `status: 'TODO'`).
   4. Devolver las tareas sugeridas al frontend para que el usuario elija cuáles agregar.
 
+## 🐳 Dockerización y Despliegue Cloud (AWS Requerido)
+
+El proyecto debe estar diseñado bajo el principio de "Twelve-Factor App", preparado para ser contenedorizado y desplegado en la nube.
+
+### Configuración de Docker:
+* **Backend:** Crear un `Dockerfile` multi-stage para Node.js/NestJS que use una imagen base ligera (`node:20-alpine`), ejecute `prisma generate`, separe las dependencias de desarrollo de las de producción y exponga el puerto correspondiente.
+* **Frontend:** Crear un `Dockerfile` que compile la SPA de React con Vite y use **Nginx** (imagen `nginx:alpine`) para servir los archivos estáticos en producción.
+* **Orquestación Local:** Proveer un archivo `docker-compose.yml` en la raíz que levante tres servicios: `postgres` (base de datos con volumen persistente), `backend` y `frontend` interconectados en la misma red.
+
+### Arquitectura de Despliegue en AWS:
+* El código del Backend debe aceptar variables de entorno (`DATABASE_URL`, `PORT`, `GEMINI_API_KEY`) inyectadas externamente, permitiendo su despliegue directo en servicios de contenedores de AWS como **AWS App Runner** o **AWS Elastic Beanstalk**.
+
 *Última actualización: generado para prueba técnica Senior Full Stack Developer — React · NestJS · PostgreSQL*
