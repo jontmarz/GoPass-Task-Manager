@@ -2,7 +2,7 @@ import { api } from './axios';
 import { Project } from '@/types';
 import { ProjectFormValues } from '@/features/projects/schemas/project.schema';
 
-export const getProjectsRequest = async (): Promise<Project[]> => {
+export const getProjects = async (): Promise<Project[]> => {
   const response = await api.get('/projects');
   return response.data;
 };
@@ -14,7 +14,7 @@ export const createProjectRequest = async (
   return response.data;
 };
 
-export const getProjectByIdRequest = async (id: string): Promise<Project> => {
+export const getProjectById = async (id: string): Promise<Project> => {
   const response = await api.get(`/projects/${id}`);
   return response.data;
 };

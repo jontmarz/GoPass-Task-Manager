@@ -1,17 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  getProjectsRequest,
+  getProjects,
   createProjectRequest,
-  getProjectByIdRequest,
+  getProjectById,
 } from '@/api/projects.api';
 import { ProjectFormValues } from '@/features/projects/schemas/project.schema';
+import { Project } from '@/types';
 
 export const useProjects = () => {
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<Project[]>({
     queryKey: ['projects'],
-    queryFn: getProjectsRequest,
+    queryFn: getProjects,
     retry: 1,
   });
 
@@ -44,7 +45,7 @@ export const useProject = (id: string) => {
     error,
   } = useQuery({
     queryKey: ['project', id],
-    queryFn: () => getProjectByIdRequest(id),
+    queryFn: () => getProjectById(id),
     retry: 1,
     enabled: !!id, // Only run the query if the id is available
   });

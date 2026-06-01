@@ -1,15 +1,24 @@
 import { api } from './axios';
-import { Task, TaskStatus } from '@/types';
-import {
-  TaskFormInputs,
-  TaskFormValues,
-} from '@/features/tasks/schemas/task.schema';
+import { Task, TaskPriority, TaskStatus } from '@/types';
+import { TaskFormInputs } from '@/features/tasks/schemas/task.schema';
 
-export const createTaskRequest = async (
-  data: TaskFormValues,
-): Promise<Task> => {
-  const response = await api.post('/tasks', data);
-  return response.data;
+// Se unifica el payload para la creación de tareas.
+// Usado tanto por el formulario manual como por las sugerencias de IA.
+export interface CreateTaskPayload {
+  title: string;
+  description?: string;
+  priority?: TaskPriority;
+  status?: TaskStatus;
+  projectId: string;
+}
+
+/**
+ * Llama al endpoint del backend para crear una nueva tarea.
+ * Esta función unificada reemplaza a la anterior `createTaskRequest`.
+ */
+export const createTask = async (task: CreateTaskPayload): Promise<Task> => {
+  const { data } = await api.post<Task>('/tasks', task);
+  return data;
 };
 
 export const updateTaskStatusRequest = async (

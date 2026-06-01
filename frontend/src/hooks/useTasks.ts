@@ -1,20 +1,19 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  createTaskRequest,
+  createTask,
   updateTaskStatusRequest,
   updateTaskRequest,
+  CreateTaskPayload,
 } from '@/api/tasks.api';
-import {
-  TaskFormInputs,
-  TaskFormValues,
-} from '@/features/tasks/schemas/task.schema';
+import { TaskFormInputs } from '@/features/tasks/schemas/task.schema';
 import { Project, TaskStatus } from '@/types';
 
+// Hook unificado para todas las mutaciones de tareas, compatible con versiones anteriores.
 export const useTasks = () => {
   const queryClient = useQueryClient();
 
   const createTaskMutation = useMutation({
-    mutationFn: (data: TaskFormValues) => createTaskRequest(data),
+    mutationFn: (data: CreateTaskPayload) => createTask(data),
     onSuccess: (newTask) => {
       // Invalidate the specific project query to refetch its tasks
       queryClient.invalidateQueries({ queryKey: ['project', newTask.projectId] });
@@ -75,10 +74,15 @@ export const useTasks = () => {
   });
 
   return {
+    createTaskMutation,
+    updateTaskMutation,
+    updateTaskStatusMutation,
+    // Para compatibilidad con componentes antiguos (ej. TaskList, TaskForm)
     createTask: createTaskMutation.mutate,
+    createTaskAsync: createTaskMutation.mutateAsync,
     isCreatingTask: createTaskMutation.isPending,
-    updateTaskStatus: updateTaskStatusMutation.mutate,
     updateTask: updateTaskMutation.mutate,
     isUpdatingTask: updateTaskMutation.isPending,
+    updateTaskStatus: updateTaskStatusMutation.mutate,
   };
 };

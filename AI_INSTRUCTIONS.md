@@ -532,4 +532,21 @@ VITE_API_URL="http://localhost:3000/api"
 
 ---
 
+## 🤖 Módulo de Inteligencia Artificial (AiModule)
+
+Se integrará una funcionalidad nativa de IA en el backend para actuar como asistente de proyectos.
+
+### Configuración e Implementación:
+* **Dependencia:** `@google/genai` (SDK oficial de Google Gen AI).
+* **Modelo a utilizar:** `gemini-2.5-flash`.
+* **Seguridad:** La API Key se leerá estrictamente desde las variables de entorno (`process.env.GEMINI_API_KEY`).
+* **Estructura:** Crear un módulo independiente llamado `AiModule` con su propio `AiService` y `AiController`.
+
+### Flujo de Trabajo y Endpoint:
+* **Ruta:** `POST /projects/:id/suggest-tasks`
+* **Lógica del Service:** 1. Obtener los detalles del proyecto (nombre y descripción) desde la base de datos usando `PrismaService`.
+  2. Enviar un prompt optimizado a Gemini solicitando ideas de tareas lógicas para ese proyecto.
+  3. **Structured Outputs:** Obligar al modelo a responder estrictamente en formato JSON que coincida con el DTO de creación de tareas (arreglo de objetos con `title`, `description`, `priority` y `status: 'TODO'`).
+  4. Devolver las tareas sugeridas al frontend para que el usuario elija cuáles agregar.
+
 *Última actualización: generado para prueba técnica Senior Full Stack Developer — React · NestJS · PostgreSQL*

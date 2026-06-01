@@ -1,6 +1,6 @@
 # GoPass Task Manager - Prueba Técnica Senior Full Stack
 
-¡Bienvenido/a a la aplicación GoPass Task Manager! Esta es una aplicación full-stack de gestión de tareas por proyectos, diseñada para demostrar habilidades avanzadas en desarrollo de software con un stack tecnológico moderno.
+¡Bienvenido/a a la aplicación GoPass Task Manager! Esta es una aplicación full-stack de gestión de tareas por proyectos, diseñada para demostrar habilidades avanzadas en desarrollo de software con un stack tecnológico moderno. Además, integra un asistente de IA (usando Google Gemini) para sugerir tareas relevantes basadas en la descripción de cada proyecto, agilizando la planificación.
 
 ## 📝 Descripción del Proyecto
 
@@ -23,6 +23,7 @@ Construido con **NestJS**, sigue una arquitectura modular y orientada a servicio
 | **Zod** (v3.x) | Validación de DTOs y schemas |
 | **Passport.js + JWT** | Autenticación basada en tokens |
 | **Swagger (OpenAPI)** | Documentación y prueba de API |
+| **@google/genai** | Asistente de IA para sugerencia de tareas |
 
 #### Descripción de Tecnologías (Backend)
 
@@ -33,6 +34,7 @@ Construido con **NestJS**, sigue una arquitectura modular y orientada a servicio
 -   **Zod (v3.x):** Librería de validación de schemas con inferencia de tipos estáticos. Se utiliza para validar los DTOs (Data Transfer Objects) en los controladores, asegurando que los datos de entrada sean correctos.
 -   **Passport.js + JWT:** Estrategia de autenticación estándar para proteger endpoints. Passport.js es un middleware de autenticación modular, y se usa junto a JSON Web Tokens (JWT) para gestionar sesiones de usuario sin estado.
 -   **Swagger (OpenAPI):** Herramienta para diseñar, construir, documentar y consumir APIs RESTful. En este proyecto, se usa para generar una documentación interactiva de la API, facilitando las pruebas.
+-   **@google/genai:** SDK oficial para interactuar con los modelos de IA de Google, como Gemini. Se utiliza para la funcionalidad de sugerencia inteligente de tareas.
 
 ### Frontend
 
@@ -128,6 +130,9 @@ Sigue estos pasos para configurar y ejecutar el proyecto en tu entorno local.
 
     # URL del frontend para la configuración de CORS
     FRONTEND_URL="http://localhost:5173"
+
+    # Clave de API para el asistente de IA de Google Gemini
+    GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
     ```
     Ajusta los valores según tu configuración local. `FRONTEND_URL` es crucial para evitar problemas de CORS.
 

@@ -5,7 +5,7 @@ import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import DashboardPage from '@/pages/DashboardPage';
 import { ProtectedRoute } from './ProtectedRoute';
-import ProjectDetailPage from '@/pages/ProjectDetailPage';
+import { ProjectDetailPage } from '@/pages/ProjectDetailPage';
 
 export const router = createBrowserRouter([
   {

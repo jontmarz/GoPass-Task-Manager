@@ -63,7 +63,7 @@ export default function TaskForm({ projectId }: TaskFormProps) {
         { onSuccess: closeTaskModal },
       );
     } else {
-      createTask({ ...apiData, projectId }, { onSuccess: closeTaskModal });
+      createTask({ ...apiData, priority: apiData.priority as import('@/types').TaskPriority, projectId }, { onSuccess: closeTaskModal });
     }
   };
 
